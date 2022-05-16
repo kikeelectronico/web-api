@@ -22,10 +22,11 @@ async def root():
 
 @app.get("/projects/")
 async def projectsEndPoint(type: str = ""):
-  print(type)
-  resources = db.collection(u'projects').where("type", "array_contains", type).stream()
+  resources = db.collection(u'projects')
+  if not type == "":
+    resources = resources.where("type", "array_contains_any", type.split(","))
   documents = []
-  for resource in resources:
+  for resource in resources.stream():
     documents.append(resource.to_dict())
 
   return documents

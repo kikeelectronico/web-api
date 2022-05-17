@@ -24,7 +24,7 @@ async def root():
 async def projectsEndPoint(type: str = ""):
   resources = db.collection(u'projects')
   if not type == "":
-    resources = resources.where("type", "array_contains_any", type.split(","))
+    resources = resources.where("public","==",True).where("type", "array_contains_any", type.split(","))
   documents = []
   for resource in resources.stream():
     documents.append(resource.to_dict())

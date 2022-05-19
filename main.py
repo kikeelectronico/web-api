@@ -30,3 +30,14 @@ async def projectsEndPoint(type: str = ""):
     proyects.append(document.to_dict())
 
   return proyects
+
+@app.get("/experiences/")
+async def experiencesEndPoint():
+  collection = db.collection(u'experiences')
+  if not type == "":
+    documents = collection.where("public","==",True).order_by("priority")
+  experiencies = []
+  for document in documents.stream():
+    experiencies.append(document.to_dict())
+
+  return experiencies

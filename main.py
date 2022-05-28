@@ -1,7 +1,5 @@
-from xml.dom.minidom import Document
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-import json
 from google.cloud import firestore
 
 app = FastAPI()

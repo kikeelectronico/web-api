@@ -1,0 +1,4 @@
+FastAPI
+uvicorn
+google-api-python-client
+google-cloud-firestore

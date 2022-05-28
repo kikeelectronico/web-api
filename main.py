@@ -63,3 +63,14 @@ async def skillsEndPoint():
     skills.append(document.to_dict())
 
   return skills
+
+@app.get("/interviews/")
+async def interviewsEndPoint():
+  collection = db.collection(u'interviews')
+  if not type == "":
+    documents = collection.where("public","==",True).order_by("priority")
+  interviews = []
+  for document in documents.stream():
+    interviews.append(document.to_dict())
+
+  return interviews

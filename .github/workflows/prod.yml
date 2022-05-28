@@ -27,18 +27,18 @@ jobs:
         gcloud auth configure-docker europe-docker.pkg.dev
     - name: Build
       run: |
-        docker build -t "eu.gcr.io/$PROJECT_ID/$SERVICE_NAME:$CONTAINER_NAME" .
+        docker build -t "europe-docker.pkg.dev/$PROJECT_ID/$SERVICE_NAME:$CONTAINER_NAME" .
     - name: Detele previous images
-      run: gcloud container images delete "eu.gcr.io/$PROJECT_ID/$SERVICE_NAME:$CONTAINER_NAME" --force-delete-tags
+      run: gcloud container images delete "europe-docker.pkg.dev/$PROJECT_ID/$SERVICE_NAME:$CONTAINER_NAME" --force-delete-tags
       continue-on-error: true
     - name: Publish
       run: |
-        docker push "eu.gcr.io/$PROJECT_ID/$SERVICE_NAME:$CONTAINER_NAME"
+        docker push "europe-docker.pkg.dev/$PROJECT_ID/$SERVICE_NAME:$CONTAINER_NAME"
     - name: Deploy
       run: |-
         gcloud run deploy "$SERVICE_NAME" \
           --quiet \
           --region "${{ secrets.RUN_REGION }}" \
-          --image "eu.gcr.io/$PROJECT_ID/$SERVICE_NAME:$CONTAINER_NAME" \
+          --image "europe-docker.pkg.dev/$PROJECT_ID/$SERVICE_NAME:$CONTAINER_NAME" \
           --platform "managed" \
           --allow-unauthenticated

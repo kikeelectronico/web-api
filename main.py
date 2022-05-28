@@ -52,3 +52,14 @@ async def coursesEndPoint():
     courses.append(document.to_dict())
 
   return courses
+
+@app.get("/skills/")
+async def skillsEndPoint():
+  collection = db.collection(u'skills')
+  if not type == "":
+    documents = collection.where("public","==",True).order_by("priority")
+  skills = []
+  for document in documents.stream():
+    skills.append(document.to_dict())
+
+  return skills

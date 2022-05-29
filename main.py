@@ -8,7 +8,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=['www.enriquegomez.me','enriquegomez.me'],
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET"],
     allow_headers=["*"],
 )
 

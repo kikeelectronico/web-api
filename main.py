@@ -82,7 +82,9 @@ async def beersEndPoint():
 
 @app.get("/subtrack/")
 async def subtrackEndPoint():
-  document = db.collection(u'beers').document(u'count')
-  count = document.get()
+  doc = db.collection(u'beers').document(u'count')
+  count = doc.get().to_dict()
+  doc.update({u'left': count["left"]-1})
+  count = doc.get().to_dict()
   
   return count

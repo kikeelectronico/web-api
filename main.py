@@ -83,8 +83,6 @@ async def beersEndPoint():
 @app.get("/subtrack/")
 async def subtrackEndPoint():
   doc = db.collection(u'beers').document(u'count')
-  count = doc.get().to_dict()
-  count["left"] = count["left"] + 1
-  doc.set(count)
+  doc.update({u'left': firestore.Increment(-1)})
   
   return "hi"

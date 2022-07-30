@@ -72,3 +72,10 @@ async def interviewsEndPoint():
     interviews.append(document.to_dict())
 
   return interviews
+
+@app.get("/beers/")
+async def beersEndPoint():
+  document = db.collection(u'beers').document(u'count')
+  count = document.get()
+  
+  return count

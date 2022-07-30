@@ -75,10 +75,10 @@ async def interviewsEndPoint():
 
 @app.get("/beers/")
 async def beersEndPoint():
-  document = db.collection(u'beers').document(u'count')
-  count = document.get()
+  doc = db.collection(u'beers').document(u'count')
+  count = doc.get().to_dict()
 
-  return "hola"
+  return count
 
 @app.get("/subtrack/")
 async def subtrackEndPoint():

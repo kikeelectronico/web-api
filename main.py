@@ -72,3 +72,17 @@ async def interviewsEndPoint():
     interviews.append(document.to_dict())
 
   return interviews
+
+@app.get("/beers/")
+async def beersEndPoint():
+  doc = db.collection(u'beers').document(u'count')
+  count = doc.get().to_dict()
+
+  return count
+
+@app.get("/subtrack/")
+async def subtrackEndPoint():
+  doc = db.collection(u'beers').document(u'count')
+  doc.update({u'left': firestore.Increment(-1)})
+  
+  return "hi"

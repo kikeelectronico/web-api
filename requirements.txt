@@ -2,3 +2,4 @@ FastAPI
 uvicorn
 google-api-python-client
 google-cloud-firestore
+python-dotenv==1.0.0

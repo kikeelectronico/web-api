@@ -1,6 +1,15 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from google.cloud import firestore
+import os
+
+# Load env vars
+if os.environ.get("CLOUD_PROJECT_ID", "none") == "none":
+  from dotenv import load_dotenv
+  load_dotenv(dotenv_path=".env")
+
+CLOUD_PROJECT_ID = os.environ.get("CLOUD_PROJECT_ID", "no_set")
+DATA_BASE_ID = os.environ.get("DATA_BASE_ID", "no_set")
 
 app = FastAPI()
 
@@ -12,7 +21,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-db = firestore.Client()
+db = firestore.Client(project=CLOUD_PROJECT_ID, database=DATA_BASE_ID)
 
 @app.get("/")
 async def root():

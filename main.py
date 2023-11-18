@@ -82,6 +82,19 @@ async def interviewsEndPoint():
 
   return interviews
 
+@app.get("/posts/")
+async def postsEndPoint(id: str = ""):
+  if id == "":
+    collection = db.collection(u'posts')
+    documents = collection.where("public","==",True).order_by("priority")
+    posts = []
+    for document in documents.stream():
+      posts.append(document.to_dict())
+    return posts
+  else:
+    document = db.collection(u'posts').document(id).get().to_dict()
+    return document
+
 @app.get("/beers/")
 async def beersEndPoint():
   doc = db.collection(u'beers').document(u'count')

@@ -86,7 +86,7 @@ async def interviewsEndPoint():
 async def postsEndPoint(id: str = ""):
   if id == "":
     collection = db.collection(u'posts')
-    documents = collection.where("public","==",True).order_by("priority")
+    documents = collection.where("public","==",True)
     posts = []
     for document in documents.stream():
       posts.append(document.to_dict())

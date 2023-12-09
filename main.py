@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from google.cloud import firestore
+from google.cloud.firestore_v1.base_query import FieldFilter
 import os
 
 # Load env vars
@@ -31,7 +32,7 @@ async def root():
 async def projectsEndPoint(type: str = ""):
   collection = db.collection(u'projects')
   if not type == "":
-    documents = collection.where("public","==",True).where("type", "array_contains_any", type.split(",")).order_by("priority")
+    documents = collection.where(filter=FieldFilter("public","==",True)).where(filter=FieldFilter("type", "array_contains_any", type.split(","))).order_by("priority")
   proyects = []
   for document in documents.stream():
     proyects.append(document.to_dict())
@@ -42,7 +43,7 @@ async def projectsEndPoint(type: str = ""):
 async def experiencesEndPoint():
   collection = db.collection(u'experiences')
   if not type == "":
-    documents = collection.where("public","==",True).order_by("priority")
+    documents = collection.where(filter=FieldFilter("public","==",True)).order_by("priority")
   experiencies = []
   for document in documents.stream():
     experiencies.append(document.to_dict())
@@ -53,7 +54,7 @@ async def experiencesEndPoint():
 async def coursesEndPoint():
   collection = db.collection(u'courses')
   if not type == "":
-    documents = collection.where("public","==",True).order_by("priority")
+    documents = collection.where(filter=FieldFilter("public","==",True)).order_by("priority")
   courses = []
   for document in documents.stream():
     courses.append(document.to_dict())
@@ -64,7 +65,7 @@ async def coursesEndPoint():
 async def skillsEndPoint():
   collection = db.collection(u'skills')
   if not type == "":
-    documents = collection.where("public","==",True).order_by("priority")
+    documents = collection.where(filter=FieldFilter("public","==",True)).order_by("priority")
   skills = []
   for document in documents.stream():
     skills.append(document.to_dict())
@@ -75,12 +76,27 @@ async def skillsEndPoint():
 async def interviewsEndPoint():
   collection = db.collection(u'interviews')
   if not type == "":
-    documents = collection.where("public","==",True).order_by("priority")
+    documents = collection.where(filter=FieldFilter("public","==",True)).order_by("priority")
   interviews = []
   for document in documents.stream():
     interviews.append(document.to_dict())
 
   return interviews
+
+@app.get("/posts/")
+async def postsEndPoint(id: str = ""):
+  if id == "":
+    collection = db.collection(u'posts')
+    documents = collection.where(filter=FieldFilter("public","==",True))
+    posts = []
+    for document in documents.stream():
+      post = document.to_dict()
+      post["id"] = document.id
+      posts.append(post)
+    return posts
+  else:
+    document = db.collection(u'posts').document(id).get().to_dict()
+    return document
 
 @app.get("/beers/")
 async def beersEndPoint():

@@ -39,12 +39,14 @@ async def projectsEndPoint(type: str = "", tldr: str = ""):
         proyects.append(document.to_dict())
       return proyects
     else:
-      tldr = db.collection(u'tldr').document(tldr).get().to_dict()
+      tldr_document = db.collection(u'tldr').document(tldr).get()
       projects = []
-      for document_id in tldr["projects"]:
-        project = collection.document(document_id).get().to_dict()
-        if not project == None and type in project["type"]:
-          projects.append(project)
+      if tldr_document.exists:
+        tldr = tldr_document.to_dict()
+        for document_id in tldr["projects"]:
+          project = collection.document(document_id).get().to_dict()
+          if not project == None and type in project["type"]:
+            projects.append(project)
       return projects
       
 

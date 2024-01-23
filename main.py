@@ -29,15 +29,27 @@ async def root():
   return {"message": "Hello, World!"}
 
 @app.get("/projects/")
-async def projectsEndPoint(type: str = ""):
+async def projectsEndPoint(type: str = "", tldr: str = ""):
   collection = db.collection(u'projects')
   if not type == "":
-    documents = collection.where(filter=FieldFilter("public","==",True)).where(filter=FieldFilter("type", "array_contains_any", type.split(","))).order_by("priority")
-  proyects = []
-  for document in documents.stream():
-    proyects.append(document.to_dict())
+    if tldr == "":
+      documents = collection.where(filter=FieldFilter("public","==",True)).where(filter=FieldFilter("type", "array_contains_any", type.split(","))).order_by("priority")
+      proyects = []
+      for document in documents.stream():
+        proyects.append(document.to_dict())
+      return proyects
+    else:
+      tldr_document = db.collection(u'tldr').document(tldr).get()
+      projects = []
+      if tldr_document.exists:
+        tldr = tldr_document.to_dict()
+        for document_id in tldr["projects"]:
+          project = collection.document(document_id).get().to_dict()
+          if not project == None and type in project["type"]:
+            projects.append(project)
+      return projects
+      
 
-  return proyects
 
 @app.get("/experiences/")
 async def experiencesEndPoint():
